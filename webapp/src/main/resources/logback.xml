@@ -1,0 +1,36 @@
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+    <!-- Cell-Life -->
+
+    <logger name="org.celllife" level="WARN" />
+
+    <!-- Hibernate -->
+
+    <logger name="org.hibernate" level="WARN" />
+
+    <!-- Spring -->
+
+    <logger name="org.springframework" level="WARN" />
+
+    <!-- C3P0 Connection Pool -->
+
+    <logger name="com.mchange.v2" level="WARN" />
+
+    <!-- Liquibase -->
+
+    <logger name="liquibase" level="WARN" />
+
+    <!-- Root -->
+
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

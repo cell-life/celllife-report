@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    	<!-- database connection -->
+        <property name="jdbcUrl" value="${database.jdbcUrl}" />
+        <property name="driverClass" value="${database.driverClass}" />
+        <property name="user" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+
+        <!-- connection pool (c3p0) -->
+        <property name="checkoutTimeout" value="${c3p0.checkout_timeout}" />
+        <property name="idleConnectionTestPeriod" value="${c3p0.idle_connection_test_period}" />
+        <property name="initialPoolSize" value="${c3p0.initial_pool_size}" />
+        <property name="maxIdleTime" value="${c3p0.max_idle_time}" />
+        <property name="maxPoolSize" value="${c3p0.max_pool_size}" />
+        <property name="minPoolSize" value="${c3p0.min_pool_size}" />
+        <property name="maxStatements" value="${c3p0.max_statements}" />
+        <property name="preferredTestQuery" value="${c3p0.preferred_test_query}" />
+        <property name="testConnectionOnCheckout" value="${c3p0.test_connection_on_checkout}" />
+    </bean>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase"  >
+        <property name="dataSource" ref="dataSource"/>
+        <property name="changeLog" value="classpath:/META-INF/liquibase/db.changelog-master.xml" />
+    </bean>
+
+</beans>

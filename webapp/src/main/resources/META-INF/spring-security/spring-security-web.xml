@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:http authentication-manager-ref="httpBasicAuthenticationManager"
+                   auto-config="true"
+                   use-expressions="true"
+                   pattern="/api/**">
+        <security:intercept-url pattern="/api/**" access="isAuthenticated()"/>
+        <security:http-basic />
+        <security:custom-filter position="CAS_FILTER" ref="casFilter"/>
+    </security:http>
+
+    <security:http authentication-manager-ref="httpBasicAuthenticationManager"
+                   auto-config="true"
+                   use-expressions="true"
+                   pattern="/service/**">
+        <security:intercept-url pattern="/service/**" access="isAuthenticated()"/>
+        <security:http-basic />
+        <security:custom-filter position="CAS_FILTER" ref="casFilter"/>
+    </security:http>
+    
+      <security:http authentication-manager-ref="httpBasicAuthenticationManager"
+                   auto-config="true"
+                   use-expressions="true"
+                   pattern="/resources	/**">
+        <security:intercept-url pattern="/resources/**" access="isAnonymous()"/>
+        </security:http>
+
+    <security:http authentication-manager-ref="casAuthenticationManager"
+                   entry-point-ref="casEntryPoint"
+                   auto-config="true"
+                   use-expressions="true">
+
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_REPORT')" />
+
+        <security:custom-filter position="CAS_FILTER" ref="casFilter"/>
+
+    	<security:logout logout-success-url="/cas-logout.jsp"/>
+    	<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
+    	<security:custom-filter ref="singleLogoutFilter" before="CAS_FILTER"/>
+    </security:http>
+
+</beans>
