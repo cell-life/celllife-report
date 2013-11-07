@@ -13,6 +13,11 @@ public class PconfigUtils {
 	
 	private static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
+    /**
+     * @param value String value.
+     * @param valueType The type of object.
+     * @return Returns an object, determined by valueType, to the value of the string specified.
+     */
 	public static Object convertValue(String value, String valueType) {
 		if (Integer.class.getSimpleName().equals(valueType)){
 			return Integer.valueOf(value);
@@ -26,7 +31,12 @@ public class PconfigUtils {
 			return value;
 		}
 	}
-	
+
+    /**
+     * Converts a date to a string object.
+     * @param date
+     * @return Date converted to String format.
+     */
 	public static String dateToString(Date date){
 		return format.format(date);
 	}
@@ -40,13 +50,11 @@ public class PconfigUtils {
 	}
 	
 	/**
-	 * This method merges the parameter values from a parameter list into the
-	 * parameters of the provided Pconfig.
-	 *
+	 * This method takes the parameter values from a parameter list and inserts them into the Pconfig.
 	 * @param descriptor
-	 *            the Pconfig to merge the parameters into
+	 *            the Pconfig to place the parameters in.
 	 * @param parameterList
-	 *            the list of Parameter objects to take values out of
+	 *            the list of Parameter objects to place in the Pconfig
 	 */
 	public static void merge(Pconfig descriptor, List<Parameter<?>> parameterList) {
 		if (parameterList == null || parameterList.isEmpty()){
@@ -63,9 +71,7 @@ public class PconfigUtils {
 
 	/**
 	 * This method copies the value from one {@link Parameter} to the other.
-	 * 
 	 * Note: both parameters must be of the same type.
-	 * 
 	 * @param withValue parameter to copy the value from
 	 * @param template parameter to copy the value to
 	 */

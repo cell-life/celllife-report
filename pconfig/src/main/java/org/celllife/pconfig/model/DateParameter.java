@@ -24,6 +24,14 @@ public class DateParameter extends BaseParameter<Date> {
 	@XmlAttribute
 	private boolean allowFuture = true;
 
+    public DateParameter() {
+
+    }
+
+    public DateParameter(String name, String label) {
+        super(name, label);
+    }
+
 	/**
 	 * Boolean value to indicate if the user is allowed to select dates in the past.
 	 * 
