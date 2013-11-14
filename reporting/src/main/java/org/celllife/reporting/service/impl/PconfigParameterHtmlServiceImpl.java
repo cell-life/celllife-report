@@ -1,19 +1,28 @@
 package org.celllife.reporting.service.impl;
 
 import org.celllife.pconfig.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 public class PconfigParameterHtmlServiceImpl {
 
-    /** Returns an html string for form fields.
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    /**
+     * Returns an html string for form fields.
+     *
      * @param pconfig The Pconfig for the HTML needed.
      * @return A string of HTML form fields an labels.
      */
-    public String createFieldsOnForm(Pconfig pconfig) {
+    public String createHtmlFieldsFromPconfig(Pconfig pconfig) {
 
         String html = "<ol>";
         String paramHtml = "";
@@ -29,7 +38,42 @@ public class PconfigParameterHtmlServiceImpl {
                 }
             }
         }
-        return html+"</ol>";
+        return html + "</ol>";
+    }
+
+    /**
+     * Converts an Enumeration and a paramterMap (taken from HttpServletRequest) to a Pconfig.
+     *
+     * @param parameterNames Enumeration of parameter names from HTML form.
+     * @param parameterMap   Map of parameters from HTML form.
+     * @param pconfig        Pconfig to fill.
+     * @return
+     */
+    public Pconfig createPconfigFromHtmlFormSubmission(Enumeration parameterNames, Map parameterMap, Pconfig pconfig) {
+
+        while (parameterNames.hasMoreElements()) {
+
+            String paramName = (String) parameterNames.nextElement();
+            Object parameterValue = parameterMap.get(paramName);
+            Object pconfigParameter = pconfig.getParameter(paramName);
+
+            if (pconfigParameter instanceof StringParameter) {
+                ((StringParameter) pconfig.getParameter(paramName)).setValue((String) parameterValue);
+            } else if (pconfigParameter instanceof IntegerParameter) {
+                ((IntegerParameter) pconfig.getParameter(paramName)).setValue((Integer) parameterValue);
+            } else if (pconfigParameter instanceof DateParameter) {
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse((String) parameterValue);
+                    ((DateParameter) pconfig.getParameter(paramName)).setValue(date);
+                } catch (ParseException e) {
+                    log.warn("Could not parse date " + parameterValue.toString());
+                }
+            } else if (pconfigParameter instanceof BooleanParameter) {
+                ((BooleanParameter) pconfig.getParameter(paramName)).setValue(Boolean.parseBoolean((String) parameterValue));
+            }
+        }
+
+        return pconfig;
     }
 
     private String getField(final Parameter<?> param) {
