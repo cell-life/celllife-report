@@ -1,6 +1,7 @@
 package org.celllife.reporting.service.impl;
 
 import org.celllife.pconfig.model.*;
+import org.celllife.reporting.service.PconfigParameterHtmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
-public class PconfigParameterHtmlServiceImpl {
+public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
