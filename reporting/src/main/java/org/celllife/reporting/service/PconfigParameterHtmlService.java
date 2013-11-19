@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface PconfigParameterHtmlService {
 
-    public String createHtmlFieldsFromPconfig(Pconfig pconfig);
+    public String createHtmlFieldsFromPconfig(Pconfig pconfig, String buttonId);
 
     public Pconfig createPconfigFromHtmlFormSubmission(Enumeration parameterNames, Map parameterMap, Pconfig pconfig);
 

@@ -23,9 +23,9 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
      * @param pconfig The Pconfig for the HTML needed.
      * @return A string of HTML form fields an labels.
      */
-    public String createHtmlFieldsFromPconfig(Pconfig pconfig) {
+    public String createHtmlFieldsFromPconfig(Pconfig pconfig, String buttonId) {
 
-        String html = "<ol>";
+        String html = "<form role=\"form\">";
         String paramHtml = "";
         List<? extends Parameter<?>> parameters = pconfig.getParameters();
 
@@ -35,11 +35,11 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
             for (final Parameter<?> param : parameters) {
                 if (!param.isHidden()) {
                     paramHtml = this.getField(param);
-                    html = html.concat("<li>" + paramHtml + "</li>");
+                    html = html.concat(paramHtml);
                 }
             }
         }
-        return html + "</ol>";
+        return html+ "<button type=\"submit\" class=\"btn btn-default\" id=\"" + buttonId + "\">Submit</button></form>";
     }
 
     /**
@@ -90,6 +90,8 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
             return getFieldHtmlForDateParameter(param);
         } else if (param instanceof BooleanParameter) {
             return getFieldHtmlForBooleanParameter(param);
+        } else if (param instanceof LabelParameter) {
+            return ("<div class=\"form-group\">" + param.getValue().toString() + "</div>");
         }
 
         return html;
@@ -108,12 +110,12 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         final StringParameter stringParam = (StringParameter) param;
         String value = stringParam.getValue();
 
-        String html = "<label for=" + param.getName().toLowerCase() + ">" +
+        String html = "<div class=\"form-group\"><label for=" + param.getName().toLowerCase() + ">" +
                 param.getLabel() + "</label>" +
                 "<input id=" + param.getName().toLowerCase() +
                 " name=" + param.getName().toLowerCase() +
                 (value == null ? "" : (" value=\"" + value.toString()) + "\"") +
-                " type=text>";
+                " type=text class=\"form-control\"></div>";
 
         return html;
     }
@@ -131,12 +133,12 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         final IntegerParameter integerParam = (IntegerParameter) param;
         Integer value = integerParam.getValue();
 
-        String html = "<label for=" + param.getName().toLowerCase() + ">" +
+        String html = "<div class=\"form-group\"><label for=" + param.getName().toLowerCase() + ">" +
                 param.getLabel() + "</label>" +
                 "<input id=" + param.getName().toLowerCase() +
                 " name=" + param.getName().toLowerCase() +
                 (value == null ? "" : " value=" + value) +
-                " type=number>";
+                " type=number class=\"form-control\"></div>";
 
         return html;
     }
@@ -157,12 +159,12 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         Date dateValue = dateParam.getValue();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        String html = "<label for=" + param.getName().toLowerCase() + ">" +
+        String html = "<div class=\"form-group\"><label for=" + param.getName().toLowerCase() + ">" +
                 param.getLabel() + "</label>" +
                 "<input id=" + param.getName().toLowerCase() +
                 " name=" + param.getName().toLowerCase() +
                 (dateValue == null ? "" : (" value=" + "\"" + df.format(dateValue)) + "\"") +
-                " type=date>";
+                " type=date class=\"form-control\"></div>";
         return html;
 
     }
@@ -182,7 +184,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         final BooleanParameter boolParam = (BooleanParameter) param;
         Boolean value = boolParam.getValue();
 
-        String html = "<label for=" + param.getName().toLowerCase() + ">" +
+        String html = "<div class=\"checkbox\"><label for=" + param.getName().toLowerCase() + ">" +
                 param.getLabel() + "</label>" +
                 "<input id=" + param.getName().toLowerCase() +
                 " name=" + param.getName().toLowerCase() +
@@ -190,9 +192,9 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                 + " type=checkbox";
 
         if ((value != null) && ((Boolean) value == true)) {
-            html = html.concat(" checked>");
+            html = html.concat(" checked></div>");
         } else {
-            html = html.concat(">");
+            html = html.concat("></div>");
         }
 
         return html;
