@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlService {
 
@@ -55,7 +52,8 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         while (parameterNames.hasMoreElements()) {
 
             String paramName = (String) parameterNames.nextElement();
-            Object parameterValue = parameterMap.get(paramName);
+            Object[]  parameterValues = (Object[])parameterMap.get(paramName);
+            Object parameterValue = parameterValues[0];
             Object pconfigParameter = pconfig.getParameter(paramName);
 
             if (pconfigParameter instanceof StringParameter) {

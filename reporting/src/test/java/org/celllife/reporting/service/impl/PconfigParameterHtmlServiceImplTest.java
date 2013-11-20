@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.apache.commons.collections.iterators.IteratorEnumeration;
 import org.celllife.pconfig.model.*;
 import org.codehaus.groovy.util.ArrayIterator;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -47,7 +48,6 @@ public class PconfigParameterHtmlServiceImplTest {
         pconfig.addParameter(booleanParameter2);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        //Date today = Calendar.getInstance().getTime();
         String reportDate = df.format(new Date());
 
         String expectedString = "<form role=\"form\"><div class=\"form-group\"><label for=country>Country of Residence:</label><input id=country name=country value=\"South Africa\" type=text class=\"form-control\"></div>" +
@@ -96,11 +96,16 @@ public class PconfigParameterHtmlServiceImplTest {
     public void testCreatePconfigFromHtmlFormSubmission() {
 
         Map parameterMap = new HashMap<>();
-        parameterMap.put("country", "South Africa");
-        parameterMap.put("name", "John Smith");
-        parameterMap.put("numberOfChildren", 10);
-        parameterMap.put("date", "2013-11-07");
-        parameterMap.put("pregnant", "true");
+        Object[] objects = {"South Africa"};
+        parameterMap.put("country", objects);
+        objects = new Object[]{"John Smith"};
+        parameterMap.put("name", objects);
+        objects = new Object[]{10};
+        parameterMap.put("numberOfChildren", objects);
+        objects = new Object[]{"2013-11-07"};
+        parameterMap.put("date", objects);
+        objects = new Object[]{"true"};
+        parameterMap.put("pregnant", objects);
 
         String[] strings = {"country", "name", "numberOfChildren", "date", "pregnant"};
         Iterator<String> stringIterator = new ArrayIterator<String>(strings);
