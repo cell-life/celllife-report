@@ -56,6 +56,10 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
             Object parameterValue = parameterValues[0];
             Object pconfigParameter = pconfig.getParameter(paramName);
 
+            if (parameterValue.toString().isEmpty()) {
+                throw new RuntimeException("The parameter " + paramName + " is null.");
+            }
+
             if (pconfigParameter instanceof StringParameter) {
                 ((StringParameter) pconfig.getParameter(paramName)).setValue((String) parameterValue);
             } else if (pconfigParameter instanceof IntegerParameter) {
@@ -65,7 +69,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse((String) parameterValue);
                     ((DateParameter) pconfig.getParameter(paramName)).setValue(date);
                 } catch (ParseException e) {
-                    log.warn("Could not parse date " + parameterValue.toString());
+                    throw new RuntimeException("The date " + parameterValue.toString() + " could not be parsed.");
                 }
             } else if (pconfigParameter instanceof BooleanParameter) {
                 ((BooleanParameter) pconfig.getParameter(paramName)).setValue(Boolean.parseBoolean((String) parameterValue));

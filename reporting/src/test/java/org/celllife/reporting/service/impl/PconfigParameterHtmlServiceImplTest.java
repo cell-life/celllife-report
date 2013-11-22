@@ -127,12 +127,16 @@ public class PconfigParameterHtmlServiceImplTest {
         BooleanParameter booleanParameter = new BooleanParameter("pregnant", "Check if pregnant.");
         pconfig.addParameter(booleanParameter);
 
+        BooleanParameter booleanParameter2 = new BooleanParameter("hiv", "Check if HIV positive.");
+        pconfig.addParameter(booleanParameter2);
+
         Pconfig returnedPconfig = pconfigParameterHtmlService.createPconfigFromHtmlFormSubmission(parameterNames, parameterMap, pconfig);
 
         Assert.assertEquals("South Africa", returnedPconfig.getParameter("country").getValue());
         Assert.assertEquals("John Smith", returnedPconfig.getParameter("name").getValue());
         Assert.assertEquals(10, returnedPconfig.getParameter("numberOfChildren").getValue());
         Assert.assertEquals(true, returnedPconfig.getParameter("pregnant").getValue());
+        Assert.assertEquals(false, returnedPconfig.getParameter("hiv").getValue());
 
     }
 }

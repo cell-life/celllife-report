@@ -12,10 +12,13 @@ public class BooleanParameter extends BaseParameter<Boolean> {
 	private static final long serialVersionUID = 4410043350849264900L;
 
 	
-	public BooleanParameter() {}
+	public BooleanParameter() {
+        value = false;
+    }
 
 	public BooleanParameter(String name, String label) {
 		super(name, label);
+        value = false;
 	}
 
 	@Override
