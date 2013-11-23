@@ -52,17 +52,18 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
      * @param pconfig        Pconfig to fill.
      * @return
      */
-    public Pconfig createPconfigFromHtmlFormSubmission(Enumeration parameterNames, Map parameterMap, Pconfig pconfig) {
+    @SuppressWarnings("rawtypes")
+	public Pconfig createPconfigFromHtmlFormSubmission(Enumeration parameterNames, Map parameterMap, Pconfig pconfig) {
 
         while (parameterNames.hasMoreElements()) {
 
             String paramName = (String) parameterNames.nextElement();
             Object[]  parameterValues = (Object[])parameterMap.get(paramName);
             Object parameterValue = parameterValues[0];
-            Object pconfigParameter = pconfig.getParameter(paramName);
+            Parameter pconfigParameter = pconfig.getParameter(paramName);
 
-            if (parameterValue.toString().isEmpty()) {
-                throw new RuntimeException("The parameter " + paramName + " is null.");
+            if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
+                throw new RuntimeException("The parameter " + paramName + " is required.");
             }
 
             if (pconfigParameter instanceof StringParameter) {
