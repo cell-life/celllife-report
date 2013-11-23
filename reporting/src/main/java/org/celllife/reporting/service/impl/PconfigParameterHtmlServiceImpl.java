@@ -41,7 +41,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                 }
             }
         }
-        return html+ "<button type=\"submit\" class=\"btn btn-default\" id=\"" + buttonId + "\">Submit</button></form>";
+        return html+ "<button type=\"submit\" class=\"btn btn-default\" id=\"" + buttonId + "\">Run Report</button></form>";
     }
 
     /**
