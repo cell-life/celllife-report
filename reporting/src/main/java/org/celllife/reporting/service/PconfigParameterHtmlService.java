@@ -1,10 +1,9 @@
 package org.celllife.reporting.service;
 
-import org.celllife.pconfig.model.Parameter;
-import org.celllife.pconfig.model.Pconfig;
-
 import java.util.Enumeration;
 import java.util.Map;
+
+import org.celllife.pconfig.model.Pconfig;
 
 public interface PconfigParameterHtmlService {
 
