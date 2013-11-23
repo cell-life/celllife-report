@@ -33,9 +33,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         String paramHtml = "";
         List<? extends Parameter<?>> parameters = pconfig.getParameters();
 
-        if (parameters == null || parameters.isEmpty()) {
-            return "This form is empty.";
-        } else {
+        if (parameters != null && !parameters.isEmpty()) {
             for (final Parameter<?> param : parameters) {
                 if (!param.isHidden()) {
                     paramHtml = this.getField(param);
