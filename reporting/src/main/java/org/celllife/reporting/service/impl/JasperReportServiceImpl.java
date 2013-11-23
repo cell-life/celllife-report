@@ -359,12 +359,13 @@ public class JasperReportServiceImpl implements ReportService {
 	@Override
 	public File getGeneratedReportFile(String id) {
 		FilledPconfig report = getGeneratedReport(id);
-		File file = new File(report.getResourcePath());
-		if (file.exists()){
-			return file;
-		} else {
-			return null;
+		if (report != null) {
+			File file = new File(report.getResourcePath());
+			if (file.exists()){
+				return file;
+			}
 		}
+		return null;
 	}
 	
 	private void deleteGeneratedReportFromDisk(final String generatedId){
