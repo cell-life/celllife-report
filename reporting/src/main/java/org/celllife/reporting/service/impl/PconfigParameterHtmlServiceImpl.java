@@ -1,18 +1,25 @@
 package org.celllife.reporting.service.impl;
 
-import org.celllife.pconfig.model.*;
-import org.celllife.reporting.service.PconfigParameterHtmlService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+import org.celllife.pconfig.model.BooleanParameter;
+import org.celllife.pconfig.model.DateParameter;
+import org.celllife.pconfig.model.IntegerParameter;
+import org.celllife.pconfig.model.LabelParameter;
+import org.celllife.pconfig.model.Parameter;
+import org.celllife.pconfig.model.Pconfig;
+import org.celllife.pconfig.model.StringParameter;
+import org.celllife.reporting.service.PconfigParameterHtmlService;
 
 public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    //private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * Returns an html string for form fields.
@@ -22,7 +29,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
      */
     public String createHtmlFieldsFromPconfig(Pconfig pconfig, String buttonId) {
 
-        String html = "<form role=\"form\">";
+        String html = "<h2>"+pconfig.getLabel()+"</h2><form role=\"form\">";
         String paramHtml = "";
         List<? extends Parameter<?>> parameters = pconfig.getParameters();
 
