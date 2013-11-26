@@ -130,6 +130,7 @@ public class PconfigParameterHtmlServiceImplTest {
         pconfig.addParameter(booleanParameter);
 
         BooleanParameter booleanParameter2 = new BooleanParameter("hiv", "Check if HIV positive.");
+        booleanParameter2.setOptional(true);
         pconfig.addParameter(booleanParameter2);
 
         Pconfig returnedPconfig = pconfigParameterHtmlService.createPconfigFromHtmlFormSubmission(parameterNames, parameterMap, pconfig);

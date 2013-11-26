@@ -1,5 +1,8 @@
 package org.celllife.reporting.service.impl;
 
+import org.celllife.pconfig.model.*;
+import org.celllife.reporting.service.PconfigParameterHtmlService;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,15 +10,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-
-import org.celllife.pconfig.model.BooleanParameter;
-import org.celllife.pconfig.model.DateParameter;
-import org.celllife.pconfig.model.IntegerParameter;
-import org.celllife.pconfig.model.LabelParameter;
-import org.celllife.pconfig.model.Parameter;
-import org.celllife.pconfig.model.Pconfig;
-import org.celllife.pconfig.model.StringParameter;
-import org.celllife.reporting.service.PconfigParameterHtmlService;
 
 public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlService {
 
@@ -55,31 +49,44 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
     @SuppressWarnings("rawtypes")
 	public Pconfig createPconfigFromHtmlFormSubmission(Enumeration parameterNames, Map parameterMap, Pconfig pconfig) {
 
-        while (parameterNames.hasMoreElements()) {
+        List<Parameter<?>> pconfigParameters = pconfig.getParameters();
 
-            String paramName = (String) parameterNames.nextElement();
-            Object[]  parameterValues = (Object[])parameterMap.get(paramName);
-            Object parameterValue = parameterValues[0];
-            Parameter pconfigParameter = pconfig.getParameter(paramName);
+        for (Parameter pconfigParameter : pconfigParameters) {
 
-            if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
-                throw new RuntimeException("The parameter " + paramName + " is required.");
+            String paramName = pconfigParameter.getName();
+            Object[] parameterValues = (Object[]) parameterMap.get(paramName);
+            Object parameterValue;
+            if (parameterValues == null) {
+                parameterValue = "";
+            } else {
+                parameterValue = parameterValues[0];
             }
 
-            if (pconfigParameter instanceof StringParameter) {
+            if (pconfigParameter instanceof LabelParameter) {
+                // do nothing
+            } else if (pconfigParameter instanceof StringParameter) {
+                if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
+                    throw new RuntimeException("The parameter " + paramName + " is required.");
+                }
                 ((StringParameter) pconfig.getParameter(paramName)).setValue((String) parameterValue);
             } else if (pconfigParameter instanceof IntegerParameter) {
+                if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
+                    throw new RuntimeException("The parameter " + paramName + " is required.");
+                }
                 ((IntegerParameter) pconfig.getParameter(paramName)).setValue((Integer) parameterValue);
             } else if (pconfigParameter instanceof DateParameter) {
-            	String dateFormat = "yyyy-MM-dd";
-            	if (!parameterValue.toString().isEmpty()) {
-	                try {
-	                    Date date = new SimpleDateFormat(dateFormat).parse((String) parameterValue);
-	                    ((DateParameter) pconfig.getParameter(paramName)).setValue(date);
-	                } catch (ParseException e) {
-	                    throw new RuntimeException("The date " + parameterValue.toString() + " is invalid. The expected format is '"+dateFormat+"'.");
-	                }
-            	}
+                if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
+                    throw new RuntimeException("The parameter " + paramName + " is required.");
+                }
+                String dateFormat = "yyyy-MM-dd";
+                if (!parameterValue.toString().isEmpty()) {
+                    try {
+                        Date date = new SimpleDateFormat(dateFormat).parse((String) parameterValue);
+                        ((DateParameter) pconfig.getParameter(paramName)).setValue(date);
+                    } catch (ParseException e) {
+                        throw new RuntimeException("The date " + parameterValue.toString() + " is invalid. The expected format is '" + dateFormat + "'.");
+                    }
+                }
             } else if (pconfigParameter instanceof BooleanParameter) {
                 ((BooleanParameter) pconfig.getParameter(paramName)).setValue(Boolean.parseBoolean((String) parameterValue));
             }
