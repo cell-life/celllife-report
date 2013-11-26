@@ -25,15 +25,15 @@ public class PconfigParameterHtmlServiceImplTest {
         pconfig.setLabel("Test Report");
 
         StringParameter stringParameter = new StringParameter("country", "Country of Residence:");
-        stringParameter.setValue("South Africa");
+        stringParameter.setDefaultValue("South Africa");
         pconfig.addParameter(stringParameter);
 
         IntegerParameter integerParameter = new IntegerParameter("numberOfChildren", "Number of children:");
-        integerParameter.setValue(10);
+        integerParameter.setDefaultValue(10);
         pconfig.addParameter(integerParameter);
 
         DateParameter dateParameter = new DateParameter("date", "The date:");
-        dateParameter.setValue(new Date());
+        dateParameter.setDefaultValue(new Date());
         pconfig.addParameter(dateParameter);
 
         LabelParameter labelParameter = new LabelParameter();
@@ -41,11 +41,11 @@ public class PconfigParameterHtmlServiceImplTest {
         pconfig.addParameter(labelParameter);
 
         BooleanParameter booleanParameter = new BooleanParameter("pregnant", "Check if pregnant.");
-        booleanParameter.setValue(false);
+        booleanParameter.setDefaultValue(false);
         pconfig.addParameter(booleanParameter);
 
         BooleanParameter booleanParameter2 = new BooleanParameter("hivpositive", "Check if HIV Positive.");
-        booleanParameter2.setValue(true);
+        booleanParameter2.setDefaultValue(true);
         pconfig.addParameter(booleanParameter2);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
