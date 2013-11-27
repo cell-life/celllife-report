@@ -15,6 +15,17 @@
 			searchFields="name,id" defaultValue="%"/>
 		<boolean label="Include test data" name="include-test" defaultValue="true" />
 		<label label="Note" value="this a a note" />
+        <select label="Country" name="country" >
+                <option>
+                    <name>South Africa</name>
+                </option>
+                <option>
+                    <name>United Kingdom</name>
+                </option>
+                <option>
+                    <name>USA</name>
+                </option>
+        </select>
 	</parameters>
 	<properties>
         <map>

@@ -148,7 +148,7 @@ public class MarshallingTest {
 		Assert.assertEquals("Test report", report.getLabel());
 		Assert.assertEquals("path/to/reportfile.jasper", report.getResource());
 		
-		Assert.assertEquals(6, report.getParameters().size());
+		Assert.assertEquals(7, report.getParameters().size());
 		
 		Parameter<?> p0 = report.getParameters().get(0);
 		Assert.assertTrue(p0 instanceof DateParameter);

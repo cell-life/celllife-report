@@ -89,6 +89,11 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                 }
             } else if (pconfigParameter instanceof BooleanParameter) {
                 ((BooleanParameter) pconfig.getParameter(paramName)).setValue(Boolean.parseBoolean((String) parameterValue));
+            } else if (pconfigParameter instanceof SelectParameter) {
+                if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
+                    throw new RuntimeException("The parameter " + paramName + " is required.");
+                }
+                ((SelectParameter) pconfig.getParameter(paramName)).setValue((String) parameterValue);
             }
         }
 
@@ -107,6 +112,8 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
             return getFieldHtmlForDateParameter(param);
         } else if (param instanceof BooleanParameter) {
             return getFieldHtmlForBooleanParameter(param);
+        } else if (param instanceof SelectParameter) {
+            return getFieldHtmlForSelectParameter(param);
         } else if (param instanceof LabelParameter) {
             return ("<div class=\"form-group\">" + param.getValue().toString() + "</div>");
         }
@@ -213,6 +220,27 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
         } else {
             html = html.concat("></div>");
         }
+
+        return html;
+    }
+
+    protected String getFieldHtmlForSelectParameter(final Parameter<?> param) {
+
+        final SelectParameter selectParam = (SelectParameter) param;
+        String defaultValue = selectParam.getDefaultValue();
+
+        String html = "<div class=\"form-group\"><label for=" + param.getName().toLowerCase() + ">" +
+                param.getLabel() + "</label>" +
+                "<select id=" + param.getName().toLowerCase() +
+                " name=" + param.getName().toLowerCase() +
+                (defaultValue == null ? "" : (" value=\"" + defaultValue.toString()) + "\"") +
+                " class=\"form-control\">";
+
+        for (SelectParameterOption option : selectParam.getOptions()) {
+            html = html.concat("<option value=\"" + option.getValue() + "\">" + option.getName() + "</option>");
+        }
+
+        html = html.concat("</select></div>");
 
         return html;
     }

@@ -47,7 +47,8 @@ public class Pconfig implements Serializable {
 			@XmlElement(name = "text", type = StringParameter.class),
 			@XmlElement(name = "entity", type = EntityParameter.class),
 			@XmlElement(name = "boolean", type = BooleanParameter.class),
-			@XmlElement(name = "label", type = LabelParameter.class) })
+			@XmlElement(name = "label", type = LabelParameter.class),
+            @XmlElement(name = "select", type = SelectParameter.class)})
 	@XmlElementWrapper(name = "parameters")
 	private List<Parameter<?>> parameters;
 

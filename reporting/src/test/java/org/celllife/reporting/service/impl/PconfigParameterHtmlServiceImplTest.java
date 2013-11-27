@@ -142,4 +142,22 @@ public class PconfigParameterHtmlServiceImplTest {
         Assert.assertEquals(false, returnedPconfig.getParameter("hiv").getValue());
 
     }
+
+    @Test
+    public void testSelectParameter() {
+
+        SelectParameter selectParameter = new SelectParameter("country","What is your country?");
+
+        SelectParameterOption spo1 = new SelectParameterOption("South Africa","southafrica");
+        SelectParameterOption spo2 = new SelectParameterOption("Zambia","zambia");
+        SelectParameterOption spo3 = new SelectParameterOption("Mozambique","mozambique");
+
+        SelectParameterOption[] options = {spo1,spo2,spo3};
+        selectParameter.setOptions(options);
+
+        String expectedString = "<div class=\"form-group\"><label for=country>What is your country?</label><select id=country name=country class=\"form-control\"><option value=\"southafrica\">South Africa</option><option value=\"zambia\">Zambia</option><option value=\"mozambique\">Mozambique</option></select></div>";
+
+        Assert.assertEquals(expectedString,pconfigParameterHtmlService.getFieldHtmlForSelectParameter(selectParameter));
+
+    }
 }
