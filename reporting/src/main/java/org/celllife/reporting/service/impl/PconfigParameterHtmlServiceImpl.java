@@ -2,6 +2,8 @@ package org.celllife.reporting.service.impl;
 
 import org.celllife.pconfig.model.*;
 import org.celllife.reporting.service.PconfigParameterHtmlService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,7 +15,7 @@ import java.util.Map;
 
 public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlService {
 
-    //private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * Returns an html string for form fields.
@@ -62,7 +64,9 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                 parameterValue = parameterValues[0];
             }
 
-            if (pconfigParameter instanceof LabelParameter) {
+            if (pconfigParameter.isHidden()) {
+                // do nothing
+            } else if (pconfigParameter instanceof LabelParameter) {
                 // do nothing
             } else if (pconfigParameter instanceof StringParameter) {
                 if (parameterValue.toString().isEmpty() && !pconfigParameter.isOptional()) {
@@ -94,6 +98,12 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                     throw new RuntimeException("The parameter " + paramName + " is required.");
                 }
                 ((SelectParameter) pconfig.getParameter(paramName)).setValue((String) parameterValue);
+                try {
+                    String fullname = ((SelectParameter) pconfig.getParameter(paramName)).getOptionName(((String) parameterValue));
+                    ((StringParameter) pconfig.getParameter(paramName + "_name")).setValue(fullname);
+                } catch (Exception e)   {
+                    log.warn("Could not set full name for select parameter with value " + ((String) parameterValue) + ". Possibly the .xml or .jrxml file does not contain a parameter with name " + paramName + "_name.");
+                }
             }
         }
 

@@ -53,4 +53,15 @@ public class SelectParameter extends BaseParameter<String> {
     public void setOptions(SelectParameterOption[] options) {
         this.options = options;
     }
+
+    public String getOptionName(String value) {
+
+        for (SelectParameterOption selectParameterOption : options) {
+            if (selectParameterOption.getValue().equals(value)) {
+                return  selectParameterOption.getName();
+            }
+        }
+
+        return null;
+    }
 }
