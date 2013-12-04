@@ -198,7 +198,7 @@ public class PconfigParameterHtmlServiceImpl implements PconfigParameterHtmlServ
                 "<input id=" + param.getName().toLowerCase() +
                 " name=" + param.getName().toLowerCase() +
                 (defaultValue == null ? "" : (" value=" + "\"" + df.format(defaultValue)) + "\"") +
-                " placeholder=\"mm/dd/yyyy\"" +
+                " placeholder=\"yyyy-mm-dd\"" +
                 " type=date class=\"form-control\"></div>";
         return html;
 
