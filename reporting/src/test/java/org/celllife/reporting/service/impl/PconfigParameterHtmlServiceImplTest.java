@@ -53,7 +53,7 @@ public class PconfigParameterHtmlServiceImplTest {
 
         String expectedString = "<h2>Test Report</h2><form role=\"form\"><div class=\"form-group\"><label for=country>Country of Residence:</label><input id=country name=country value=\"South Africa\" type=text class=\"form-control\"></div>" +
                 "<div class=\"form-group\"><label for=numberofchildren>Number of children:</label><input id=numberofchildren name=numberofchildren value=10 type=number class=\"form-control\"></div>" +
-                "<div class=\"form-group\"><label for=date>The date:</label><input id=date name=date value=\"" + reportDate + "\" placeholder=\"mm/dd/yyyy\" type=date class=\"form-control\"></div>" +
+                "<div class=\"form-group\"><label for=date>The date:</label><input id=date name=date value=\"" + reportDate + "\" placeholder=\"yyyy-mm-dd\" type=date class=\"form-control\"></div>" +
                 "<div class=\"form-group\">If not set the start date will default to the beginning of the current month.</div>" +
                 "<div class=\"checkbox\"><label for=pregnant>Check if pregnant.</label><input id=pregnant name=pregnant value=\"true\" type=checkbox></div>" +
                 "<div class=\"checkbox\"><label for=hivpositive>Check if HIV Positive.</label><input id=hivpositive name=hivpositive value=\"true\" type=checkbox checked></div>" +
@@ -86,7 +86,7 @@ public class PconfigParameterHtmlServiceImplTest {
 
         String expectedString = "<h2>Test Report</h2><form role=\"form\"><div class=\"form-group\"><label for=country>Country of Residence:</label><input id=country name=country type=text class=\"form-control\"></div>" +
                 "<div class=\"form-group\"><label for=numberofchildren>Number of children:</label><input id=numberofchildren name=numberofchildren type=number class=\"form-control\"></div>" +
-                "<div class=\"form-group\"><label for=date>The date:</label><input id=date name=date placeholder=\"mm/dd/yyyy\" type=date class=\"form-control\"></div>" +
+                "<div class=\"form-group\"><label for=date>The date:</label><input id=date name=date placeholder=\"yyyy-mm-dd\" type=date class=\"form-control\"></div>" +
                 "<div class=\"checkbox\"><label for=pregnant>Check if pregnant.</label><input id=pregnant name=pregnant value=\"true\" type=checkbox></div>" +
                 "<div class=\"checkbox\"><label for=hivpositive>Check if HIV Positive.</label><input id=hivpositive name=hivpositive value=\"true\" type=checkbox></div>" +
                 "<button type=\"submit\" class=\"btn btn-default\" id=\"submitButton\">Run Report</button></form>";
