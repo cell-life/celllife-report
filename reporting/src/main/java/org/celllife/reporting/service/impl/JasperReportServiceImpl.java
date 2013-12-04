@@ -43,6 +43,7 @@ import org.joda.time.DateMidnight;
 import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 
 public class JasperReportServiceImpl implements ReportService {
 	
@@ -479,7 +480,11 @@ public class JasperReportServiceImpl implements ReportService {
 	}
 	
 	@Override
-	public void deleteOldReports(){
+	@Scheduled(cron = "${report.delete.cron}")
+	public void deleteOldReports() {
+		if (log.isDebugEnabled()) {
+			log.debug("Deleting reports older than "+maxAge+" days old from "+generatedFolder);
+		}
 		Collection<FilledPconfig> reports = generatedReportMap.values();
 		Iterator<FilledPconfig> iterator = reports.iterator();
 		while (iterator.hasNext()){
