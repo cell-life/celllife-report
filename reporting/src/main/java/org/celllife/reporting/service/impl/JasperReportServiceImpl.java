@@ -21,9 +21,11 @@ import javax.sql.DataSource;
 import javax.xml.bind.JAXBException;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -185,7 +187,8 @@ public class JasperReportServiceImpl implements ReportService {
 			} else {
 				jasperPrint = JasperFillManager.fillReport(fileInputStream, map, conn);
 			}
-			String absolutePath = new File(exportPath).getAbsolutePath();
+			File absolutePathFile = new File(exportPath);
+			String absolutePath = absolutePathFile.getAbsolutePath();
 			
 			switch(type){
 			case HTML:
@@ -196,6 +199,12 @@ public class JasperReportServiceImpl implements ReportService {
 				break;
 			case XML:
 				JasperExportManager.exportReportToXmlFile(jasperPrint, absolutePath, false);
+				break;
+			case CSV:
+				JRCsvExporter exporter = new JRCsvExporter();
+	            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint); 
+	            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, absolutePathFile);
+	            exporter.exportReport();
 				break;
 			}
 			

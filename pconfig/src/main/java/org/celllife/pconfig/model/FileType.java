@@ -2,6 +2,7 @@ package org.celllife.pconfig.model;
 public enum FileType {
 		PDF(".pdf"),
 		XML(".xml"),
+		CSV(".csv"),
 		HTML(".html");
 
 		private final String extension;

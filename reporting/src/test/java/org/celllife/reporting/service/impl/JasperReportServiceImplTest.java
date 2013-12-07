@@ -1,8 +1,10 @@
 package org.celllife.reporting.service.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -111,6 +113,21 @@ public class JasperReportServiceImplTest {
 		
 		validateReportFile(report.getPconfig(), reportFile);
 	}
+	
+	@Test
+	public void testGenerateCSVReport() throws Exception{
+		Pconfig demo = service.getReportByName("demo");
+		fillParameters(demo);
+		String id = service.generateReport(demo, FileType.CSV);
+		
+		FilledPconfig report = service.getGeneratedReport(id);
+		Assert.assertEquals(id, report.getId());
+		File reportFile = service.getGeneratedReportFile(id);
+		Assert.assertTrue(reportFile.exists());
+		BufferedReader reader = new BufferedReader(new FileReader(reportFile));
+		Assert.assertEquals(",Demo report,,,", reader.readLine());
+	}
+	
 	
 	@Test
 	public void testGenerateReport_entity() throws Exception{
