@@ -90,7 +90,7 @@ public class ReportsController {
             	throw new RuntimeException("Could not retrieve report with reportId '" + reportId + "'.");
             }
 
-            response.setContentType("application/pdf");
+            response.setContentType("application/"+reportFileType.getExtension().substring(1));
             response.setHeader("Content-Disposition", "attachment; filename=\"report-" + generatedReport + reportFileType.getExtension() + "\"");
             try {
                 FileInputStream fileInputStream = new FileInputStream(reportFile);
