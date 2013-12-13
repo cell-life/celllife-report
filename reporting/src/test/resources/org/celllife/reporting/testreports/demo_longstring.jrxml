@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport 
+		xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+		name="demo_longstring" 
+		pageWidth="150" pageHeight="150"
+		whenNoDataType="AllSectionsNoDetail" 
+		columnWidth="110" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+
+	<queryString>
+		<![CDATA[SELECT
+ "Testing a really long sms. what will happen when we try to export this to CSV as sms_text";]]>
+	</queryString>
+	<field name="sms_text" class="java.lang.String"/>
+	
+	<variable name="sms_text_too" class="java.lang.String">
+		<variableExpression><![CDATA["Testing a really long sms. what will happen when we try to export this to CSV as sms_text"]]></variableExpression>
+	</variable>
+	
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="47" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="47" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[Sms text]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="110" height="20" isPrintWhenDetailOverflows="true" />
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{sms_text_too}]]></textFieldExpression>
+			</textField>
+			<!--<staticText>
+				<reportElement x="0" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[Testing a really long sms. what will happen when we try to export this to CSV as sms_text]]></text>
+			</staticText>-->
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

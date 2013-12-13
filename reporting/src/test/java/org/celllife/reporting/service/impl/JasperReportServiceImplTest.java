@@ -70,7 +70,7 @@ public class JasperReportServiceImplTest {
 	@Test
 	public void testGetReports(){
 		Collection<Pconfig> reports = service.getReports();
-		Assert.assertEquals(6, reports.size());
+		Assert.assertEquals(7, reports.size());
 	}
 	
 	@Test
@@ -127,7 +127,21 @@ public class JasperReportServiceImplTest {
 		BufferedReader reader = new BufferedReader(new FileReader(reportFile));
 		Assert.assertEquals(",Demo report,,,", reader.readLine());
 	}
-	
+
+	@Test
+	public void testGenerateCSVReportLongStrings() throws Exception{
+		Pconfig demo = service.getReportByName("demo_longstring");
+		fillParameters(demo);
+		String id = service.generateReport(demo, FileType.CSV);
+		
+		FilledPconfig report = service.getGeneratedReport(id);
+		Assert.assertEquals(id, report.getId());
+		File reportFile = service.getGeneratedReportFile(id);
+		Assert.assertTrue(reportFile.exists());
+		BufferedReader reader = new BufferedReader(new FileReader(reportFile));
+		Assert.assertEquals("Sms text", reader.readLine());
+		Assert.assertEquals("Testing a really long sms. what will happen when we try to export this to CSV as sms_text", reader.readLine());
+	}
 	
 	@Test
 	public void testGenerateReport_entity() throws Exception{
