@@ -45,9 +45,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@git.cell-life.org:celllife-report.git</connection>
-        <developerConnection>scm:git:git@git.cell-life.org:celllife-report.git</developerConnection>
-        <url>https://www.cell-life.org/gitlab/celllife-report</url>
+        <connection>scm:git:git@git.cell-life.org:celllife-reports.git</connection>
+        <developerConnection>scm:git:git@git.cell-life.org:celllife-reports.git</developerConnection>
+        <url>https://www.cell-life.org/gitlab/celllife-reports</url>
     </scm>
 
     <dependencyManagement>
