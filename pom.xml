@@ -53,6 +53,13 @@
     <dependencyManagement>
 
         <dependencies>
+            
+            <!-- email (for scheduled reports) -->
+            <dependency>
+                <groupId>org.celllife.mail</groupId>
+                <artifactId>celllife-mail</artifactId>
+                <version>1.0.1</version>
+            </dependency>
 
             <!-- Logging -->
             <dependency>

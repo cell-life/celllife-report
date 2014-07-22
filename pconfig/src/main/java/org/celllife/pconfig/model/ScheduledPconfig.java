@@ -11,147 +11,163 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ScheduledPconfig implements Serializable {
 
-	private static final long serialVersionUID = 3739675542605140760L;
+    private static final long serialVersionUID = 3739675542605140760L;
 
-	public static final String PROP_END_DATE = "endDate";
-	public static final String PROP_START_DATE = "startDate";
+    public static final String PROP_END_DATE = "endDate";
+    public static final String PROP_START_DATE = "startDate";
 
-	@XmlElement
-	private String id;
+    @XmlElement
+    private String id;
 
-	@XmlElement
-	private RepeatInterval repeatInterval;
+    @XmlElement
+    private RepeatInterval repeatInterval;
 
-	@XmlElement
-	private int intervalCount;
+    @XmlElement
+    private int intervalCount;
 
-	@XmlElement
-	private Date startDate;
+    @XmlElement
+    private Date startDate;
 
-	@XmlElement
-	private Date endDate;
+    @XmlElement
+    private Date endDate;
 
-	@XmlElement
-	private String scheduledFor;
+    @XmlElement
+    private String scheduledFor;
 
-	@XmlElement
-	private Pconfig pconfig;
+    @XmlElement
+    private FileType fileType;
 
-	public ScheduledPconfig() {
-	}
+    @XmlElement
+    private Pconfig pconfig;
 
-	public ScheduledPconfig(Pconfig pconfig) {
-		super();
-		this.pconfig = pconfig;
-	}
+    public ScheduledPconfig() {
+    }
 
-	public String getId() {
-		return id;
-	}
+    public ScheduledPconfig(Pconfig pconfig) {
+        super();
+        this.pconfig = pconfig;
+    }
 
-	/**
-	 * A unique ID for the scheduled pconfig
-	 * 
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public RepeatInterval getRepeatInterval() {
-		return repeatInterval;
-	}
+    /**
+     * A unique ID for the scheduled pconfig
+     * 
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**
-	 * They type of interval to repeat over.
-	 * 
-	 * @param repeatInterval
-	 */
-	public void setRepeatInterval(RepeatInterval repeatInterval) {
-		this.repeatInterval = repeatInterval;
-	}
+    public RepeatInterval getRepeatInterval() {
+        return repeatInterval;
+    }
 
-	public int getIntervalCount() {
-		return intervalCount;
-	}
+    /**
+     * They type of interval to repeat over.
+     * 
+     * @param repeatInterval
+     */
+    public void setRepeatInterval(RepeatInterval repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
 
-	/**
-	 * The number of repeat intervals between schedules.
-	 * 
-	 * e.g. every 1 week
-	 * 
-	 * @param intervalCount
-	 */
-	public void setIntervalCount(int intervalCount) {
-		this.intervalCount = intervalCount;
-	}
+    public int getIntervalCount() {
+        return intervalCount;
+    }
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    /**
+     * The number of repeat intervals between schedules.
+     * 
+     * e.g. every 1 week
+     * 
+     * @param intervalCount
+     */
+    public void setIntervalCount(int intervalCount) {
+        this.intervalCount = intervalCount;
+    }
 
-	/**
-	 * The date that the schedule starts
-	 * 
-	 * @param startDate
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    /**
+     * The date that the schedule starts
+     * 
+     * @param startDate
+     */
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	/**
-	 * The date that the schedule ends
-	 * 
-	 * @param endDate
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public String getScheduledFor() {
-		return scheduledFor;
-	}
+    /**
+     * The date that the schedule ends
+     * 
+     * @param endDate
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	/**
-	 * A generic field to store a reference of who the schedule was created for.
-	 * 
-	 * e.g. email address
-	 * 
-	 * @param scheduledFor
-	 */
-	public void setScheduledFor(String scheduledFor) {
-		this.scheduledFor = scheduledFor;
-	}
+    public String getScheduledFor() {
+        return scheduledFor;
+    }
 
-	public Pconfig getPconfig() {
-		return pconfig;
-	}
+    /**
+     * A generic field to store a reference of who the schedule was created for.
+     * 
+     * e.g. email address
+     * 
+     * @param scheduledFor
+     */
+    public void setScheduledFor(String scheduledFor) {
+        this.scheduledFor = scheduledFor;
+    }
 
-	/**
-	 * The pconfig that this schedule applies to.
-	 * 
-	 * @param pconfig
-	 */
-	public void setPconfig(Pconfig pconfig) {
-		this.pconfig = pconfig;
-	}
-	
-	public String getProperty(String key) {
-		if (pconfig == null) {
-			return null;
-		}
-		return pconfig.getProperty(key);
-	}
+    public Pconfig getPconfig() {
+        return pconfig;
+    }
 
-	public boolean hasProperty(String propertyName) {
-		if (pconfig == null)
-			return false;
+    /**
+     * Set the type of File that should be generated (PDF, CSV, etc)
+     * 
+     * @param fileType
+     */
+    public void setFileType(FileType fileType) {
+        this.fileType = fileType;
+    }
 
-		return pconfig.hasProperty(propertyName);
-	}
+    public FileType getFileType() {
+        return fileType;
+    }
+
+    /**
+     * The pconfig that this schedule applies to.
+     * 
+     * @param pconfig
+     */
+    public void setPconfig(Pconfig pconfig) {
+        this.pconfig = pconfig;
+    }
+
+    public String getProperty(String key) {
+        if (pconfig == null) {
+            return null;
+        }
+        return pconfig.getProperty(key);
+    }
+
+    public boolean hasProperty(String propertyName) {
+        if (pconfig == null)
+            return false;
+
+        return pconfig.hasProperty(propertyName);
+    }
 
 }

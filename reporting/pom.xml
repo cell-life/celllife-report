@@ -20,7 +20,13 @@
         <dependency>
             <groupId>org.celllife.report</groupId>
             <artifactId>celllife-report-pconfig</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>${version}</version>
+        </dependency>
+        
+        <!-- email (for scheduled reports) -->
+        <dependency>
+            <groupId>org.celllife.mail</groupId>
+            <artifactId>celllife-mail</artifactId>
         </dependency>
 
 		<!-- testing -->
