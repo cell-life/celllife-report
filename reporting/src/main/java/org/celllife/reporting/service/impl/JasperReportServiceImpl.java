@@ -220,26 +220,28 @@ public class JasperReportServiceImpl implements ReportService {
 
     private Map<String, Object> getParameterMap(Pconfig report) {
         Map<String, Object> map = new HashMap<String, Object>();
-        for (Parameter<?> param : report.getParameters()) {
-            if (param instanceof LabelParameter) {
-                continue;
-            }
-
-            Object value = param.getValue();
-            if (value == null) {
-                value = param.getDefaultValue();
-            }
-
-            if (value != null && param instanceof EntityParameter) {
-                EntityParameter eParam = (EntityParameter) param;
-                String valueType = eParam.getValueType();
-                if (valueType != null && !valueType.isEmpty()) {
-                    value = PconfigUtils.convertValue((String) value, valueType);
+        if (report.getParameters() != null) {
+            for (Parameter<?> param : report.getParameters()) {
+                if (param instanceof LabelParameter) {
+                    continue;
                 }
-            }
-
-            if (value != null) {
-                map.put(param.getName(), value);
+    
+                Object value = param.getValue();
+                if (value == null) {
+                    value = param.getDefaultValue();
+                }
+    
+                if (value != null && param instanceof EntityParameter) {
+                    EntityParameter eParam = (EntityParameter) param;
+                    String valueType = eParam.getValueType();
+                    if (valueType != null && !valueType.isEmpty()) {
+                        value = PconfigUtils.convertValue((String) value, valueType);
+                    }
+                }
+    
+                if (value != null) {
+                    map.put(param.getName(), value);
+                }
             }
         }
         return map;
@@ -321,6 +323,8 @@ public class JasperReportServiceImpl implements ReportService {
     @Override
     @Scheduled(cron = "${report.scheduled.cron}")
     public void generateScheduledReports() throws ReportingException {
+        log.info("Running scheduled reports now ...");
+
         // refresh the scheduled report cache
         refreshScheduledReportCache();
 
@@ -553,6 +557,7 @@ public class JasperReportServiceImpl implements ReportService {
         for (ScheduledPconfig report : scheduledReports) {
             String id = report.getId();
             if (id != null && !id.isEmpty()) {
+                log.debug("Found report: " + report.getId() + " for report " + report.getPconfig().getId());
                 scheduledReportMap.put(id, report);
             } else {
                 log.warn("Warning: Scheduled report loaded without id property: " + report.getId());
