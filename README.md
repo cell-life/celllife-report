@@ -1,6 +1,7 @@
-This project provides Jasper reporting capabilities. 
+Celllife Reporting Framework
+============================
 
-Please see the documentation on the wiki: https://www.cell-life.org/confluence/display/CLS/Reporting+framework
+This project provides Jasper reporting capabilities. Please see the documentation on the wiki: https://www.cell-life.org/confluence/display/CLS/Reporting+framework
 
 To use
 ------
@@ -9,13 +10,13 @@ To use
 
 Add the celllife-mail dependency in your pom.xml. 
 
-Note: Please check for the latest releases on [Nexus for celllife-report](https://www.cell-life.org/nexus/content/repositories/releases/org/celllife/report/) and the [Maven repository for Jasper](http://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports)
-
-*root pom.xml*
+*root pom.xml*:
 
 ```xml
 <jasperreports.version>5.5.0</jasperreports.version>
 ```
+
+Note: Please check for the latest releases on [Nexus for celllife-report](https://www.cell-life.org/nexus/content/repositories/releases/org/celllife/report/) and the [Maven repository for Jasper](http://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports)
 
 ```xml
 <!-- Cell-Life reporting framework -->
@@ -47,7 +48,7 @@ Note: Please check for the latest releases on [Nexus for celllife-report](https:
 </dependency>
 ```
 
-*webapp pom.xml*
+*webapp pom.xml*:
 
 ```xml
 <!-- Cell-Life reporting framework -->
@@ -125,7 +126,7 @@ Add the Jasper compile as part of the build process. The following XML needs to 
 
 Create a file called spring-reports.xml under your META-INF/spring folder. Please replace ${APP_HOME} with the env variable for your project. 
 
-*example without scheduled reports email functionality*
+*example without scheduled reports email functionality*:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -147,9 +148,7 @@ Create a file called spring-reports.xml under your META-INF/spring folder. Pleas
 </beans>
 ```
 
-*example with scheduled reports email functionality*
-
-Note: You will also need to add a spring-mail.xml file as described in [step 2 option B in the celllife-mail dependency](https://www.cell-life.org/gitlab/celllife-mail/tree/master).
+*example with scheduled reports email functionality*:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -172,22 +171,28 @@ Note: You will also need to add a spring-mail.xml file as described in [step 2 o
 </beans>
 ```
 
+Note: For the second example, you will also need to add a spring-mail.xml file as described in [step 2 option B in the celllife-mail dependency](https://www.cell-life.org/gitlab/celllife-mail/tree/master).
+
 ### Step 4: 
 
 Add the properties referenced above into your application.properties
-
-Note: if you are using email functionality, you also need to add email properties.
 
 ```bash
 report.delete.cron=0 0 23 * * * 
 report.scheduled.cron=0 0 9 * * *
 ```
 
+Note: if you are using email functionality, you also need to add email properties.
+
 ### Step 5: 
 
-Create a folder which contains your report resources under webapp/src/mail/resources/reports. This folder will contain your Jasper report files (.jrxml), any referenced images or styles and your Pconfig XML files which are used to describe your report so it can be loaded by this report library.
+Implement your reports and create a Pconfig XML file for each.
 
-*Example Pconfig file* - this file references a report named referrals_report.jrxml with two parameters (one date named "start_date" and one named "end_date"). These parameters need to match the parameters as defined in your jrxml.
+First, create a folder which contains your report resources under webapp/src/mail/resources/reports. This folder will contain your Jasper report files (.jrxml), any referenced images or styles and your Pconfig XML files which are used to describe your report so it can be loaded by this report library.
+
+Now, create your Jasper reports (use iReport) and then create a Pconfig file to describe your report and its parameters.
+
+*Example Pconfig file #1* - this file references a report named referrals_report.jrxml with two parameters (one date named "start_date" and one named "end_date"). These parameters need to match the parameters as defined in your jrxml.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -207,7 +212,7 @@ Create a folder which contains your report resources under webapp/src/mail/resou
 </pconfig>
 ```
 
-*More complex Pconfig file* - this file references a report named visits_report.jrxml with two date parameters, many boolean (checkbox) parameters and one drop down list single select parameter called "location_name". The parameter names all need to match the parameters in your jrxml.
+*More complex Pconfig file #2* - this file references a report named visits_report.jrxml with two date parameters, many boolean (checkbox) parameters and one drop down list single select parameter called "location_name". The parameter names all need to match the parameters in your jrxml.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -276,7 +281,7 @@ Create a folder which contains your report resources under webapp/src/mail/resou
 </pconfig>
 ```
 
-### Step 6:
+### Step 6: 
 
 Implement the UI that allows the user to select a report, enter in the parameters and view the PDF or CSV.
 
@@ -320,6 +325,7 @@ class IndexController {
     def index(Model model) {
         getReports(model)
     }
+
     @RequestMapping(value="index", method = RequestMethod.GET)
     def getReports(Model model) {
         def reports = restClient.get("${externalBaseUrl}/service/reports")
@@ -399,30 +405,21 @@ Note: Please use the JSP header/footer as defined by your application - this is 
  
 <script>
     $(document).ready(function () {
- 
         $(".reportLink").click(function () {
- 
             var reportId = $(this).attr('href') + '';
             reportId = reportId.replace('#', '');
- 
-            $.get(
-                    "service/getHtml",
+            $.get("service/getHtml",
                     {reportId: reportId},
                     function (data) {
                         $(".form").html(data);
- 
                         $(".form").on('submit', function (e) {
                             e.preventDefault();
                             window.location = "service/csvReport" + "?reportId=" + reportId + "&" + $("form").serialize();
                         });
                     }
             );
- 
         });
- 
     });
- 
- 
 </script>
  
 </body>
