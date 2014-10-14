@@ -2,6 +2,7 @@ package org.celllife.pconfig.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,6 +34,9 @@ public class ScheduledPconfig implements Serializable {
 
     @XmlElement
     private String scheduledFor;
+    
+    @XmlElement (required = false, defaultValue = "Email")
+    private ScheduledMethod scheduledMethod = ScheduledMethod.Email;
 
     @XmlElement
     private FileType fileType;
@@ -145,6 +149,19 @@ public class ScheduledPconfig implements Serializable {
 
     public FileType getFileType() {
         return fileType;
+    }
+    
+    public ScheduledMethod getScheduledMethod() {
+        return scheduledMethod;
+    }
+
+    /**
+     * Sets the transport method for the scheduled report (Email or Sms)
+     * 
+     * @param scheduledMethod
+     */
+    public void setScheduledMethod(ScheduledMethod scheduledMethod) {
+        this.scheduledMethod = scheduledMethod;
     }
 
     /**

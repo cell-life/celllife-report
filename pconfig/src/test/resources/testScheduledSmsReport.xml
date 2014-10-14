@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<spconfig xmlns="http://www.cell-life.org/schemas/pconfig">
+    <id>123</id>
+    <repeatInterval>Daily</repeatInterval>
+    <intervalCount>1</intervalCount>
+    <startDate>2013-01-01T00:00:00+02:00</startDate>
+    <endDate>2023-01-01T00:00:00+02:00</endDate>
+    <scheduledFor>27768198075</scheduledFor>
+    <scheduledMethod>Sms</scheduledMethod>
+    <pconfig>
+        <id>test_report</id>
+    	<label>Test report</label>
+    	<resource>path/to/reportfile.jasper</resource>
+        <parameters/>
+    </pconfig>
+</spconfig>

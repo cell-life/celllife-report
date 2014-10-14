@@ -15,15 +15,6 @@ import javax.xml.bind.Unmarshaller;
 
 import junit.framework.Assert;
 
-import org.celllife.pconfig.model.BaseParameter;
-import org.celllife.pconfig.model.BooleanParameter;
-import org.celllife.pconfig.model.DateParameter;
-import org.celllife.pconfig.model.EntityParameter;
-import org.celllife.pconfig.model.IntegerParameter;
-import org.celllife.pconfig.model.LabelParameter;
-import org.celllife.pconfig.model.Parameter;
-import org.celllife.pconfig.model.Pconfig;
-import org.celllife.pconfig.model.StringParameter;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -198,6 +189,24 @@ public class MarshallingTest {
 		Assert.assertEquals("test value1", report.getProperty("test-key1"));
 		Assert.assertEquals("test value2", report.getProperty("test-key2"));
 	}
+
+    @Test
+    public void testReadingScheduledReport() throws JAXBException, SAXException, IOException{
+        String file = this.getClass().getClassLoader().getResource("testScheduledReport.xml").getFile();
+        ScheduledPconfig report = (ScheduledPconfig) read(new Pconfig(), new File(file));
+        Assert.assertEquals("123", report.getId());
+        Assert.assertEquals(1, report.getIntervalCount());
+        Assert.assertEquals("dagmar@cell-life.org", report.getScheduledFor());
+        Assert.assertEquals(ScheduledMethod.Email, report.getScheduledMethod());
+    }
+    
+    @Test
+    public void testReadingScheduledSmsReport() throws JAXBException, SAXException, IOException{
+        String file = this.getClass().getClassLoader().getResource("testScheduledSmsReport.xml").getFile();
+        ScheduledPconfig report = (ScheduledPconfig) read(new Pconfig(), new File(file));
+        Assert.assertEquals("27768198075", report.getScheduledFor());
+        Assert.assertEquals(ScheduledMethod.Sms, report.getScheduledMethod());
+    }
 	
 	@Test
 	public void testFilledReport() throws Exception {
@@ -237,7 +246,34 @@ public class MarshallingTest {
 		Assert.assertEquals(sPconfig.getRepeatInterval(), read.getRepeatInterval());
 		Assert.assertEquals(sPconfig.getEndDate(), read.getEndDate());
 		Assert.assertEquals(sPconfig.getStartDate(), read.getStartDate());
+		Assert.assertEquals(ScheduledMethod.Email, read.getScheduledMethod());
 	}
+	
+    @Test
+    public void testScheduledPconfigWithSms() throws Exception {
+        String file = this.getClass().getClassLoader().getResource("testReport.xml").getFile();
+        Pconfig pconfig = (Pconfig) read(new Pconfig(), new File(file));
+        
+        ScheduledPconfig sPconfig = new ScheduledPconfig(pconfig);
+        sPconfig.setId("id-123");
+        sPconfig.setIntervalCount(9);
+        sPconfig.setRepeatInterval(RepeatInterval.Monthly);
+        sPconfig.setScheduledFor("scheduledForMe");
+        sPconfig.setStartDate(new Date());
+        sPconfig.setEndDate(new Date());
+        sPconfig.setScheduledMethod(ScheduledMethod.Sms);
+        
+        writeXml(sPconfig, TEST_FILE);
+        ScheduledPconfig read = (ScheduledPconfig) read(new ScheduledPconfig(), TEST_FILE);
+        
+        validateTestPconfig(read.getPconfig());
+        Assert.assertEquals(sPconfig.getId(), read.getId());
+        Assert.assertEquals(sPconfig.getIntervalCount(), read.getIntervalCount());
+        Assert.assertEquals(sPconfig.getRepeatInterval(), read.getRepeatInterval());
+        Assert.assertEquals(sPconfig.getEndDate(), read.getEndDate());
+        Assert.assertEquals(sPconfig.getStartDate(), read.getStartDate());
+        Assert.assertEquals(ScheduledMethod.Sms, read.getScheduledMethod());
+    }
 	
 	protected void writeXml(Object sample, File file) throws JAXBException,
 			IOException {
