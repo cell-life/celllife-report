@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.6.4</slf4j.version>
         <spring.version>3.2.1.RELEASE</spring.version>
-		<jasperreports.version>4.0.1</jasperreports.version>
+		<jasperreports.version>5.6.1</jasperreports.version>
     </properties>
 
     <build>
