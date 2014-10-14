@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.io.IOUtils;
+import org.celllife.mobilisr.api.rest.ContactDto;
 import org.celllife.mobilisr.client.MobilisrClient;
 import org.celllife.pconfig.model.EntityParameter;
 import org.celllife.pconfig.model.FileType;
@@ -40,6 +44,7 @@ import org.celllife.pconfig.model.LabelParameter;
 import org.celllife.pconfig.model.Parameter;
 import org.celllife.pconfig.model.Pconfig;
 import org.celllife.pconfig.model.RepeatInterval;
+import org.celllife.pconfig.model.ScheduledMethod;
 import org.celllife.pconfig.model.ScheduledPconfig;
 import org.celllife.pconfig.util.PconfigUtils;
 import org.celllife.reporting.ReportingException;
@@ -392,13 +397,12 @@ public class JasperReportServiceImpl implements ReportService {
                     reportId = generateReport(spconfig.getPconfig(), spconfig.getFileType());
                 }
 
-                // And email!
+                // And send!
                 File report = getGeneratedReportFile(reportId);
-                String emailAddress = spconfig.getScheduledFor();
-                if (mailService != null && emailAddress != null) {
-                    log.info("Emailing scheduled report " + report + " to " + emailAddress);
-                    mailService.sendEmail(emailAddress, spconfig.getPconfig().getLabel(),
-                            "Please see attached report.", report);
+                if (spconfig.getScheduledMethod() == ScheduledMethod.Sms) {
+                    sendReportBySms(spconfig, reportId, report);
+                } else {
+                    sendReportByEmail(spconfig, report);
                 }
 
             } else {
@@ -408,6 +412,59 @@ public class JasperReportServiceImpl implements ReportService {
                             + " and it is now " + new Date());
                 }
             }
+        }
+    }
+
+    private void sendReportByEmail(ScheduledPconfig spconfig, File report) {
+        String emailAddress = spconfig.getScheduledFor();
+        if (mailService == null) {
+            log.warn("Could not email scheduled report " + report + " to " + emailAddress 
+                    + " because there is no email service defined.");
+        } else if (emailAddress == null || emailAddress.trim().equals("")) {
+            log.info("Could not email scheduled report " + report 
+                    + " because there is no email address defined as `scheduledFor`");
+        } else {
+            log.info("Emailing scheduled report " + report + " to " + emailAddress);
+            mailService.sendEmail(emailAddress, spconfig.getPconfig().getLabel(),
+                    "Please see attached report.", report);
+        }
+    }
+
+    private void sendReportBySms(ScheduledPconfig spconfig, String reportId, File report) {
+        String msisdn = spconfig.getScheduledFor();
+        try {
+            FileReader fileReader = null;
+            try {
+                fileReader = new FileReader(report);
+                String smsText = IOUtils.toString(fileReader).trim();
+                if (smsText.equals("")) {
+                    log.warn("Could not sms scheduled report " + report + " to " + msisdn 
+                            + " because the report text is empty.");
+                } else if (smsText.length() > 1000) {
+                    log.warn("Could not sms scheduled report " + report + " to " + msisdn 
+                            + " because the report text was more than 1000 characters: '" + smsText + "'");
+                } else {
+                    if (communicateClient == null) {
+                        log.warn("Could not sms scheduled report " + report + " to " + msisdn 
+                                + " because there is no Communicate client defined.");
+                    } else {
+                        log.debug("About to send sms '" + smsText + "'" + " to " + msisdn);
+                        List<ContactDto> contacts = new ArrayList<>();
+                        ContactDto contactDto = new ContactDto();
+                        contactDto.setMsisdn(msisdn);
+                        contacts.add(contactDto);
+                        String campaignName = "Sms Scheduled Report - " + reportId  + " - " + msisdn + "-" + new Date();
+                        String campaignDescription = "JustSendSMS to " + msisdn;
+                        communicateClient.getCampaignService().createNewCampaign(campaignName, campaignDescription, smsText, contacts);
+                        log.debug("Sent sms '" + smsText + "'" + " to " + msisdn);
+                    }
+                }
+            } finally {
+                try { fileReader.close(); } catch (IOException e) {};
+            }
+        } catch (Exception e) {
+            log.error("Could not sms scheduled report " + report + " to " + msisdn 
+                    + " because an unexpected error occurred. Error: " + e.getMessage(), e);
         }
     }
 

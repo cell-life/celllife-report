@@ -38,6 +38,7 @@ import org.celllife.pconfig.model.IntegerParameter;
 import org.celllife.pconfig.model.Parameter;
 import org.celllife.pconfig.model.Pconfig;
 import org.celllife.pconfig.model.RepeatInterval;
+import org.celllife.pconfig.model.ScheduledMethod;
 import org.celllife.pconfig.model.ScheduledPconfig;
 import org.celllife.pconfig.model.StringParameter;
 import org.celllife.reporting.ReportingException;
@@ -331,6 +332,31 @@ public class JasperReportServiceImplTest {
         scheduledPconfig.setRepeatInterval(RepeatInterval.Daily);
         scheduledPconfig.setFileType(FileType.PDF);
         scheduledPconfig.setScheduledFor("dagmar@cell-life.org");
+
+        String id = service.saveScheduledReportConfig(scheduledPconfig);
+        
+        service.generateScheduledReports();
+        Thread.sleep(15000);
+        
+        service.deleteScheduledReport(id);
+    }
+    
+    @Test
+    @Ignore("no Asserts - use to test the sms sending when required.")
+    public void testScheduledSmsReport() throws Exception {
+        
+        Pconfig demo = service.getReportByName("demo_txt");
+        ScheduledPconfig scheduledPconfig = new ScheduledPconfig(demo);
+        Calendar cal = Calendar.getInstance();
+        cal.roll(Calendar.DAY_OF_MONTH, -3);
+        scheduledPconfig.setStartDate(cal.getTime());
+        cal.roll(Calendar.YEAR, 1);
+        scheduledPconfig.setEndDate(cal.getTime());
+        scheduledPconfig.setIntervalCount(1);
+        scheduledPconfig.setRepeatInterval(RepeatInterval.Daily);
+        scheduledPconfig.setFileType(FileType.TXT);
+        scheduledPconfig.setScheduledFor("27768198075");
+        scheduledPconfig.setScheduledMethod(ScheduledMethod.Sms);
 
         String id = service.saveScheduledReportConfig(scheduledPconfig);
         
