@@ -20,12 +20,15 @@ import java.util.Map;
 import javax.sql.DataSource;
 import javax.xml.bind.JAXBException;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRTextExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -183,10 +186,16 @@ public class JasperReportServiceImpl implements ReportService {
             case XML:
                 JasperExportManager.exportReportToXmlFile(jasperPrint, absolutePath, false);
                 break;
+            case TXT:
+                JRTextExporter txtExporter = new JRTextExporter(DefaultJasperReportsContext.getInstance());        
+                txtExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                txtExporter.setExporterOutput(new SimpleHtmlExporterOutput(absolutePath));
+                txtExporter.exportReport();
+                break;
             case CSV:
                 JRCsvExporter exporter = new JRCsvExporter();
-                exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                exporter.setParameter(JRExporterParameter.OUTPUT_FILE, absolutePathFile);
+                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                exporter.setExporterOutput(new SimpleHtmlExporterOutput(absolutePath));
                 exporter.exportReport();
                 break;
             }

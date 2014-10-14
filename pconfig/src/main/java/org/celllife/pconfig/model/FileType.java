@@ -3,6 +3,7 @@ public enum FileType {
 		PDF(".pdf"),
 		XML(".xml"),
 		CSV(".csv"),
+		TXT(".txt"),
 		HTML(".html");
 
 		private final String extension;

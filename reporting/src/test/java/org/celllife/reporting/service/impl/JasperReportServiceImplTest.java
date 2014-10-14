@@ -86,7 +86,7 @@ public class JasperReportServiceImplTest {
     @Test
     public void testGetReports() {
         Collection<Pconfig> reports = service.getReports();
-        Assert.assertEquals(7, reports.size());
+        Assert.assertEquals(8, reports.size());
     }
 
     @Test
@@ -128,6 +128,22 @@ public class JasperReportServiceImplTest {
         Assert.assertTrue(reportFile.exists());
 
         validateReportFile(report.getPconfig(), reportFile);
+    }
+    
+    @Test
+    public void testGenerateTxtReport() throws Exception {
+        Pconfig demo = service.getReportByName("demo_txt");
+        fillParameters(demo);
+        String id = service.generateReport(demo, FileType.TXT);
+
+        FilledPconfig report = service.getGeneratedReport(id);
+        Assert.assertEquals(id, report.getId());
+        File reportFile = service.getGeneratedReportFile(id);
+        Assert.assertTrue(reportFile.exists());
+        
+        System.out.println("file="+reportFile);
+        String txtFile = IOUtils.toString(new FileReader(reportFile));
+        Assert.assertEquals("HELLO demo report", txtFile.trim());
     }
 
     @Test
@@ -385,9 +401,12 @@ public class JasperReportServiceImplTest {
      * which should contain the value of a particular parameter.
      */
     private void validateReportFile(Pconfig report, File reportFile) throws Exception {
+        System.out.println("VALIDATING "+reportFile);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
+
+        //System.out.println(FileUtils.readFileToString(reportFile));
+
         Document doc = builder.parse(reportFile);
 
         XPathFactory xfactory = XPathFactory.newInstance();
@@ -395,13 +414,12 @@ public class JasperReportServiceImplTest {
 
         for (Parameter<?> param : report.getParameters()) {
             String paramkey = param.getName() + "key";
-            XPathExpression expr = xpath.compile("//reportElement[@key='" + paramkey + "']/following-sibling::*");
-            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            XPathExpression expr = xpath.compile("//text/reportElement[@key='" + paramkey + "']/../textContent");
+            NodeList nodes = (NodeList)expr.evaluate(doc, XPathConstants.NODESET);
 
-            NodeList nodes = (NodeList) result;
-            collector.checkThat(nodes.getLength(), IsEqual.equalTo(1));
+            Assert.assertEquals(1, nodes.getLength());
 
-            Node item = nodes.item(0);
+            Node item = nodes.item(0);            
             String textContent = item.getTextContent();
             Object value = param.getValue();
             if (value == null) {
