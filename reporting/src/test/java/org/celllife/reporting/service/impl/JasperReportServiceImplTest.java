@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -23,6 +24,11 @@ import javax.xml.xpath.XPathFactory;
 import junit.framework.Assert;
 
 import org.apache.commons.io.IOUtils;
+import org.celllife.mobilisr.api.validation.MsisdnRule;
+import org.celllife.mobilisr.api.validation.ValidatorFactory;
+import org.celllife.mobilisr.api.validation.ValidatorFactoryImpl;
+import org.celllife.mobilisr.client.MobilisrClient;
+import org.celllife.mobilisr.client.impl.MobilisrClientImpl;
 import org.celllife.pconfig.model.BooleanParameter;
 import org.celllife.pconfig.model.DateParameter;
 import org.celllife.pconfig.model.EntityParameter;
@@ -63,6 +69,8 @@ public class JasperReportServiceImplTest {
         service.setGeneratedReportFolder("target/generatedReports");
         service.setScheduledReportFolder("target/scheduledReports");
         service.setSourceReportFolder("target/reports/org/celllife/reporting/testreports");
+        
+        // mail service
         MailServiceImpl mailService = new MailServiceImpl();
         mailService.setFrom("technical@cell-life.org");
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
@@ -77,6 +85,15 @@ public class JasperReportServiceImplTest {
         props.setProperty("mail.smtp.starttls.enable", "false");
         javaMailSender.setJavaMailProperties(props);
         service.setMailService(mailService);
+        
+        // communicate
+        List<MsisdnRule> rules = new ArrayList<MsisdnRule>();
+        rules.add(new MsisdnRule("southafrica", "27", "^27[0-9]{9}$"));
+        ValidatorFactory vfactory = new ValidatorFactoryImpl(rules);
+        MobilisrClient communicateClient = new MobilisrClientImpl("http://sol.cell-life.org/communicate", 
+                "username", "password", vfactory);
+        service.setCommunicateClient(communicateClient);
+        
         SpringResourceLoader loader = new SpringResourceLoader();
         loader.setResourceLoader(new FileSystemResourceLoader());
         service.setReportLoader(loader);

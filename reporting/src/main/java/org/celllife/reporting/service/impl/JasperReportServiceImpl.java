@@ -32,6 +32,7 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.celllife.mobilisr.client.MobilisrClient;
 import org.celllife.pconfig.model.EntityParameter;
 import org.celllife.pconfig.model.FileType;
 import org.celllife.pconfig.model.FilledPconfig;
@@ -77,6 +78,8 @@ public class JasperReportServiceImpl implements ReportService {
     private ReportLoader loader;
 
     private MailService mailService;
+    
+    private MobilisrClient communicateClient;
 
     private int maxAge = 7;
 
@@ -637,6 +640,10 @@ public class JasperReportServiceImpl implements ReportService {
 
     public void setMailService(MailService mailService) {
         this.mailService = mailService;
+    }
+
+    public void setCommunicateClient(MobilisrClient communicateClient) {
+        this.communicateClient = communicateClient;
     }
 
     public void setMaxAge(int days) {

@@ -126,7 +126,7 @@ Add the Jasper compile as part of the build process. The following XML needs to 
 
 Create a file called spring-reports.xml under your META-INF/spring folder. Please replace ${APP_HOME} with the env variable for your project. 
 
-*example without scheduled reports email functionality*:
+*example without scheduled reports email or sms functionality*:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -171,7 +171,63 @@ Create a file called spring-reports.xml under your META-INF/spring folder. Pleas
 </beans>
 ```
 
-Note: For the second example, you will also need to add a spring-mail.xml file as described in [step 2 option B in the celllife-mail dependency](https://www.cell-life.org/gitlab/celllife-mail/tree/master).
+Note: For the example above, you will also need to add a spring-mail.xml file as described in [step 2 option B in the celllife-mail dependency](https://www.cell-life.org/gitlab/celllife-mail/tree/master).
+
+*example with scheduled reports email and sms functionality*:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <bean id="reportServiceImpl"
+          class="org.celllife.reporting.service.impl.JasperReportServiceImpl" init-method="buildService">
+        <property name="dataSource" ref="dataSource" />
+        <property name="generatedReportFolder" value="${OHSC_HOME}/reports/generated"/>
+        <property name="scheduledReportFolder" value="${OHSC_HOME}/reports/scheduled"/>
+        <property name="sourceReportFolder" value="classpath:reports"/>
+        <property name="reportLoader">
+            <bean class="org.celllife.reporting.service.impl.SpringResourceLoader"/>
+        </property>
+        <property name="mailService" ref="mailService" />
+        <property name="communicateClient" ref="communicateClient" />
+    </bean>
+</beans>
+```
+
+Note: for the example above, you will also need to add a spring-integration-communicate.xml file as described below
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="communicateClient" class="org.celllife.mobilisr.client.impl.MobilisrClientImpl">
+    	<constructor-arg index="0" value="${communicate.api}" />
+    	<constructor-arg index="1" value="${communicate.username}" />
+    	<constructor-arg index="2" value="${communicate.password}" />
+    	<constructor-arg index="3"><ref bean="communicateValidatoryFactory" /></constructor-arg>
+    </bean>
+    
+    <bean id="communicateValidatoryFactory" class="org.celllife.mobilisr.api.validation.ValidatorFactoryImpl">
+    	<property name="countryRules">
+    		<list>
+    			<ref bean="communicateMsisdnRules"/>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="communicateMsisdnRules" class="org.celllife.mobilisr.api.validation.MsisdnRule">
+    	<constructor-arg name="name" value="southafrica"/>
+    	<constructor-arg name="prefix" value="${communicate.msisdnPrefix}"/>
+    	<constructor-arg name="validator" value="${communicate.msisdnRegex}"/>
+    </bean>
+
+</beans>
+```
 
 ### Step 4: 
 
@@ -182,7 +238,29 @@ report.delete.cron=0 0 23 * * *
 report.scheduled.cron=0 0 9 * * *
 ```
 
-Note: if you are using email functionality, you also need to add email properties.
+If you are using email functionality, you also need to add these email properties.
+
+```bash
+mailSender.username=technical@cell-life.org
+mailSender.password=xxxxxxxxxxxxx
+mailSender.host=smtp.gmail.com
+mailSender.protocol=smtps
+mailSender.from=technical@cell-life.org
+mailSender.port=465
+mailSender.smtp.auth=false
+mailSender.smtp.starttls.enable=false
+```
+
+If you are using sms functionality, you also need to add these email properties.
+
+```bash
+communicate.api=http://sol.cell-life.org/communicate
+communicate.username=
+communicate.password=
+communicate.msisdnPrefix = 27
+communicate.msisdnRegex = ^27[0-9]{9}$
+```
+
 
 ### Step 5: 
 

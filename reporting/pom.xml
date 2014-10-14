@@ -28,6 +28,16 @@
             <groupId>org.celllife.mail</groupId>
             <artifactId>celllife-mail</artifactId>
         </dependency>
+        
+        <!-- Communicate (for SMS scheduled reports)  -->
+        <dependency>
+            <groupId>org.celllife.mobilisr</groupId>
+            <artifactId>org.celllife.mobilisr.client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.celllife.mobilisr</groupId>
+            <artifactId>org.celllife.mobilisr.api</artifactId>
+        </dependency>
 
 		<!-- testing -->
         <dependency>
