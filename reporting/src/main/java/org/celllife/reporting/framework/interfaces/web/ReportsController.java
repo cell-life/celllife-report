@@ -67,6 +67,13 @@ public class ReportsController {
 
     	generateReport(request, response, FileType.CSV);
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/service/txtReport", method = RequestMethod.GET, produces = "application/txt")
+    public void getTxtReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        generateReport(request, response, FileType.TXT);
+    }
 
 	private void generateReport(HttpServletRequest request, HttpServletResponse response, FileType reportFileType) {
 		String reportId = request.getParameter("reportId");
