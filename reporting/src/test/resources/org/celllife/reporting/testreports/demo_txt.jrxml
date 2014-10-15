@@ -6,12 +6,12 @@
 	<background/>
 	<title/>
 	<pageHeader>
-		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="380" height="20"/>
-				<textElement />
-				<text><![CDATA[HELLO demo report]]></text>
-			</staticText>
+		<band height="40" splitType="Stretch">
+			<textField isStretchWithOverflow="true" evaluationTime="Report">
+				<reportElement x="0" y="0" width="380" height="40"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + "HELLO\ndemo report"]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader/>

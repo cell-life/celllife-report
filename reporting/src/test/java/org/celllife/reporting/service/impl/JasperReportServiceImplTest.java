@@ -158,10 +158,10 @@ public class JasperReportServiceImplTest {
         Assert.assertEquals(id, report.getId());
         File reportFile = service.getGeneratedReportFile(id);
         Assert.assertTrue(reportFile.exists());
-        
-        System.out.println("file="+reportFile);
+
         String txtFile = IOUtils.toString(new FileReader(reportFile));
-        Assert.assertEquals("HELLO demo report", txtFile.trim());
+        txtFile = txtFile.trim().replaceAll("  ", "");
+        Assert.assertEquals("HELLO\ndemo report", txtFile);
     }
 
     @Test
