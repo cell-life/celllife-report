@@ -385,7 +385,12 @@ public class JasperReportServiceImpl implements ReportService {
 
                 // Finally, generate the report
                 String reportId = null;
-                if (spconfig.getFileType() == null) {
+                if (spconfig.getFileType() == null && spconfig.getScheduledMethod() == ScheduledMethod.Sms) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Running scheduled TXT(!) report " + spconfig.getId());
+                    }
+                    reportId = generateReport(spconfig.getPconfig(), FileType.TXT);
+                } else if (spconfig.getFileType() == null) {
                     if (log.isDebugEnabled()) {
                         log.debug("Running scheduled PDF report " + spconfig.getId());
                     }
@@ -424,9 +429,14 @@ public class JasperReportServiceImpl implements ReportService {
             log.info("Could not email scheduled report " + report 
                     + " because there is no email address defined as `scheduledFor`");
         } else {
-            log.info("Emailing scheduled report " + report + " to " + emailAddress);
-            mailService.sendEmail(emailAddress, spconfig.getPconfig().getLabel(),
-                    "Please see attached report.", report);
+            try {
+                log.info("Emailing scheduled report " + report + " to " + emailAddress);
+                mailService.sendEmail(emailAddress, spconfig.getPconfig().getLabel(),
+                        "Please see attached report.", report);
+            } catch (Throwable t) {
+                log.error("Error while emailing scheduled report " + report + " to " + emailAddress + ". Error: "
+                                + t.getMessage(), t);
+            }
         }
     }
 
@@ -436,7 +446,7 @@ public class JasperReportServiceImpl implements ReportService {
             FileReader fileReader = null;
             try {
                 fileReader = new FileReader(report);
-                String smsText = IOUtils.toString(fileReader).trim();
+                String smsText = IOUtils.toString(fileReader).replaceAll("  ", "").trim();
                 if (smsText.equals("")) {
                     log.warn("Could not sms scheduled report " + report + " to " + msisdn 
                             + " because the report text is empty.");
