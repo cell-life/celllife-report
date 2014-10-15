@@ -5,7 +5,7 @@
 
     <groupId>org.celllife.report</groupId>
     <artifactId>celllife-report-parent</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>celllife-report-parent</name>
