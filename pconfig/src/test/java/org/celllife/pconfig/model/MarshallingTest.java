@@ -206,6 +206,7 @@ public class MarshallingTest {
         ScheduledPconfig report = (ScheduledPconfig) read(new Pconfig(), new File(file));
         Assert.assertEquals("27768198075", report.getScheduledFor());
         Assert.assertEquals(ScheduledMethod.Sms, report.getScheduledMethod());
+        Assert.assertEquals(FileType.TXT, report.getFileType());
     }
 	
 	@Test

@@ -7,6 +7,7 @@
     <endDate>2023-01-01T00:00:00+02:00</endDate>
     <scheduledFor>27768198075</scheduledFor>
     <scheduledMethod>Sms</scheduledMethod>
+    <fileType>TXT</fileType>
     <pconfig>
         <id>test_report</id>
     	<label>Test report</label>
