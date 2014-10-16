@@ -99,8 +99,9 @@ public class ReportsController {
 
             response.setContentType("application/"+reportFileType.getExtension().substring(1));
             response.setHeader("Content-Disposition", "attachment; filename=\"report-" + generatedReport + reportFileType.getExtension() + "\"");
+            FileInputStream fileInputStream = null;
             try {
-                FileInputStream fileInputStream = new FileInputStream(reportFile);
+                fileInputStream = new FileInputStream(reportFile);
                 OutputStream responseOutputStream = response.getOutputStream();
                 int bytes;
                 while ((bytes = fileInputStream.read()) != -1) {
@@ -108,9 +109,9 @@ public class ReportsController {
                 }
             } catch (IOException e) {
                 throw new RuntimeException("Could not create "+reportFileType.name()+" for report with reportId '"+reportId+"'.", e);
+            } finally {
+                try { if (fileInputStream != null) fileInputStream.close(); } catch (Exception e) {};
             }
-
         }
 	}
-
 }
