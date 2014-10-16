@@ -23,12 +23,12 @@ Note: Please check for the latest releases on [Nexus for celllife-report](https:
 <dependency>
     <groupId>org.celllife.report</groupId>
     <artifactId>celllife-report-pconfig</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 <dependency>
     <groupId>org.celllife.report</groupId>
     <artifactId>celllife-report-reporting</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 <!-- Jasper -->
 <dependency>
