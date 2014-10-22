@@ -117,6 +117,13 @@
 		            </exclusion>
 		        </exclusions>
 		    </dependency>
+            
+            <!-- Jasper Fonts dependency -->
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports-fonts</artifactId>
+                <version>${jasperreports.version}</version>
+            </dependency>
 
             <!-- JodaTime -->
             <dependency>

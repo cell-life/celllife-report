@@ -85,6 +85,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Jasper fonts -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+        </dependency>
 
 		<!-- Commons IO -->
         <dependency>

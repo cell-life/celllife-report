@@ -46,6 +46,12 @@ Note: Please check for the latest releases on [Nexus for celllife-report](https:
         </exclusion>
     </exclusions>
 </dependency>
+<!-- Jasper Fonts -->
+<dependency>
+    <groupId>net.sf.jasperreports</groupId>
+    <artifactId>jasperreports-fonts</artifactId>
+    <version>${jasperreports.version}</version>
+</dependency>
 ```
 
 *webapp pom.xml*:
@@ -95,6 +101,11 @@ Add the Jasper compile as part of the build process. The following XML needs to 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
+            <version>${jasperreports.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
             <version>${jasperreports.version}</version>
         </dependency>
         <dependency>
